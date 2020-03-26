@@ -26,10 +26,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('ng8-testing');
   });
 
-  it('should render title', () => {
+  it('should render title in h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('ng8-testing app is running!');
+    expect(compiled.querySelector('h1').textContent).toContain('ng8-testing');
   });
 });
