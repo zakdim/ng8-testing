@@ -2,8 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserComponent } from './user.component';
 import { UserService } from './user.service';
+import { DataService } from '../shared/data.service';
 
-fdescribe('UserComponent', () => {
+describe('UserComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [UserComponent]
@@ -40,4 +41,27 @@ fdescribe('UserComponent', () => {
     let compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('p').textContent).not.toContain(app.user.name); 
   });
+
+  it('shouldn\'t fetch data successfully if not called anynchronously', () => {
+    let fixture = TestBed.createComponent(UserComponent);
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    expect(app.data).toBe(undefined);
+
+  });
+
+  it('should fetch data successfully if called anynchronously', async(() => {
+    let fixture = TestBed.createComponent(UserComponent);
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(app.data).toBe('Data');
+    });
+  }));
 });
